@@ -16,6 +16,7 @@ prv_txid = "84d813beb51c3a12cb5d0bb18c6c15062453d476de24cb2f943ca6e20115d85c"
 Charlie_adr = "17X4s8JdSdLxFyraNUDBzgmnSNeZpjm42g"
 charlie_hashed_pubkey = base58.b58decode_check(Charlie_adr)[1:].encode("hex")
 
+
 # Bob sends 0.001 BTC to Charlie and he sends 0.0005 BTC back to himself (change) and the remainder of 0.0005 BTC will be given to the miner as a fee
 
 # 1. raw tx
