@@ -371,7 +371,7 @@ class BitcoinConnection(object):
                        they are to be paid.
         """
         try:
-            print "EFE DEBUG: in:%s, out:%s" % (inputs,outputs)
+            print ("EFE DEBUG: in:%s, out:%s" % (inputs,outputs))
             sys.stdout.flush()
             return self.proxy.createrawtransaction(inputs, outputs)
         except JSONRPCException as e:

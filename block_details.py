@@ -19,7 +19,7 @@ def block_summary(block_num):
     count = 0
     total = len(tx_id_list)
     for tx_id in tx_id_list:
-        print block_num, count, "/" , total, " ", tx_id
+        print (block_num, count, "/" , total, " ", tx_id)
         count = count + 1
         # print tx_id
         tx = tx_db.Transaction(tx_id)
@@ -40,4 +40,4 @@ if __name__ == "__main__":
     for current_block in blocks_range:
         # print current_block
         list_len, fees_sum = block_summary(current_block)
-        print current_block, list_len, fees_sum
+        print (current_block, list_len, fees_sum)

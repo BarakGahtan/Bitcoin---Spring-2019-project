@@ -126,7 +126,7 @@ class AuthServiceProxy(object):
          resp = resp.decode('utf8')
          resp = json.loads(resp, parse_float=decimal.Decimal)
          if 'error' in resp and resp['error'] != None:
-             print "EFE DEBUG: %s" % resp
+             print ("EFE DEBUG: %s" % resp)
              raise JSONRPCException(resp['error'])
          elif 'result' not in resp:
              raise JSONRPCException({

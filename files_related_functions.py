@@ -81,10 +81,10 @@ def get_output_file_path(output_dir_path=None, time_stamp=None, block_count=0, s
 def create_file(output_file_path, function_to_create_file):
     mkdir_p(os.path.dirname(output_file_path))
     if os.path.isfile(output_file_path):
-        print output_file_path, "already exists"
+        print (output_file_path, "already exists")
     else:
         function_to_create_file()
-        print output_file_path, "created"
+        print (output_file_path, "created")
 
 
 def filter_by_block_number_and_suffix(first_block, last_block, suffix):

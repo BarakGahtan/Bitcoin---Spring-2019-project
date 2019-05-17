@@ -1,9 +1,7 @@
 import configparser
 from bitcoinrpc import connection
 
-
 bitcoin_core_rpc_connection = None
-
 
 def connect_to_node():
     config = configparser.ConfigParser()
