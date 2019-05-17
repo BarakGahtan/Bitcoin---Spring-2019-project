@@ -18,6 +18,7 @@ def connect_to_node():
                                                                host=hostip,
                                                                port=portnum)
     assert (bitcoin_core_rpc_connection is not None)
+    return bitcoin_core_rpc_connection
 
 
 def get_connection():
