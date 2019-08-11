@@ -9,10 +9,13 @@ itay.key_generator_func()
 
 connection1 = bitcoin_core_connection_setup.connect_to_node()
 print(connection1.getblockcount())
-multi_keys=[]
-multi_keys.append(lior.public_key)
-multi_keys.append(barak.public_key)
-multi_address = connection1.addmultisigaddress(2,multi_keys).get("address")
+multi_public_keys=[]
+multi_public_keys.append(lior.public_key)
+multi_public_keys.append(barak.public_key)
+multi_private_keys=[]
+multi_private_keys.append(lior.private_key)
+multi_private_keys.append(barak.private_key)
+multi_address = connection1.addmultisigaddress(2,multi_public_keys).get("address")
 print(multi_address)
 connection1.generatetoaddress(1,multi_address)
 list = [multi_address]
@@ -23,7 +26,7 @@ unspent_txid = unspent[0]
 txid_multi_block = unspent_txid[0].get("txid")
 print("unspent:",txid_multi_block)
 hash_to_be_sent = connection1.createrawtransaction([{"txid": txid_multi_block, "vout": 0}], {itay.address:40})
-signed = connection1.signrawtransactionwithkey(hash_to_be_sent,multi_keys)
+signed = connection1.signrawtransactionwithkey(hash_to_be_sent,multi_private_keys)
 print(signed)
 
 #print("itay balance:", connection1.getreceivedbylabel("itay",0))

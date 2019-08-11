@@ -18,7 +18,7 @@ class Person:
 
             # generate private key , uncompressed WIF starts with "5"
             priv_key = os.urandom(32)
-            fullkey = '80' + binascii.hexlify(priv_key).decode()
+            fullkey = 'EF' + binascii.hexlify(priv_key).decode()
             sha256a = hashlib.sha256(binascii.unhexlify(fullkey)).hexdigest()
             sha256b = hashlib.sha256(binascii.unhexlify(sha256a)).hexdigest()
             WIF = base58.b58encode(binascii.unhexlify(fullkey + sha256b[:8]))
@@ -27,7 +27,7 @@ class Person:
             vk = sk.get_verifying_key()
             publ_key = '04' + binascii.hexlify(vk.to_string()).decode()
             hash160 = self.ripemd160(hashlib.sha256(binascii.unhexlify(publ_key)).digest()).digest()
-            publ_addr_a = b"\x00" + hash160
+            publ_addr_a = b"\x6f" + hash160
             checksum = hashlib.sha256(hashlib.sha256(publ_addr_a).digest()).digest()[:4]
             publ_addr_b = base58.b58encode(publ_addr_a + checksum)
             i = n + 1
