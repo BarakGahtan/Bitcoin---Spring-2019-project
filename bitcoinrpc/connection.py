@@ -431,7 +431,7 @@ class BitcoinConnection(object):
         except JSONRPCException as e:
             raise _wrap_exception(e.error)
 
-    def signrawtransaction(self, hexstring, previous_transactions=None, private_keys=None):
+    def signrawtransactionwithkey(self, hexstring, previous_transactions=None, private_keys=None):
         """
         Sign inputs for raw transaction (serialized, hex-encoded).
 
@@ -450,7 +450,7 @@ class BitcoinConnection(object):
             keys that, if given, will be the only keys used to sign the transaction.
         """
         try:
-            return dict(self.proxy.signrawtransaction(hexstring, previous_transactions, private_keys))
+            return dict(self.proxy.signrawtransactionwithkey(hexstring, previous_transactions, private_keys))
         except JSONRPCException as e:
             raise _wrap_exception(e.error)
 
@@ -463,7 +463,7 @@ class BitcoinConnection(object):
         - *hexstring* -- A hex string of the transaction to be decoded.
         """
         try:
-            retVal = self.proxy.decoderawtransaction(hexstring)
+            retVal = self.proxy.signrawtransactionwithkey(hexstring)
             return dict(retVal)
         except JSONRPCException as e:
             raise _wrap_exception(e.error)
@@ -853,22 +853,14 @@ class BitcoinConnection(object):
         except JSONRPCException as e:
             raise _wrap_exception(e.error)
 
-    def addmultisigaddress(self,keys):
+    def addmultisigaddress(self,number,keys):
         """
                 """
         try:
-            return TransactionInfo(**self.proxy.addmultisigaddress(keys))
+            return self.proxy.addmultisigaddress(number,keys)
         except JSONRPCException as e:
             raise _wrap_exception(e.error)
 
-    def signrawtransaction(self, txnHex): 
-        """
-        Submits raw transaction (serialized, hex-encoded) to local node and network. 
-        """
-        try:
-            return TransactionInfo(**self.proxy.signrawtransaction(txnHex))
-        except JSONRPCException as e:
-            raise _wrap_exception(e.error)
 
     def sendrawtransaction(self, txnHex): 
         """
