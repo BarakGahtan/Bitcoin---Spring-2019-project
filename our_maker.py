@@ -14,7 +14,7 @@ connection1 = bitcoin_core_connection_setup.connect_to_node()
 print(connection1.getblockcount())
 
 
-
+address_lior = connection1.getnewaddress("lior")
 address_lior = connection1.getnewaddress("lior")
 priv_key_lior = connection1.dumpprivkey(address_lior)
 address_barak = connection1.getnewaddress("barak")
