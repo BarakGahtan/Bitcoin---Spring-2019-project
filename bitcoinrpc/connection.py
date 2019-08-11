@@ -853,11 +853,11 @@ class BitcoinConnection(object):
         except JSONRPCException as e:
             raise _wrap_exception(e.error)
 
-    def addmultisigaddress(self,key1, key2):
+    def addmultisigaddress(self,keys):
         """
                 """
         try:
-            return TransactionInfo(**self.proxy.addmultisigaddress(key1,key2))
+            return TransactionInfo(**self.proxy.addmultisigaddress(keys))
         except JSONRPCException as e:
             raise _wrap_exception(e.error)
 

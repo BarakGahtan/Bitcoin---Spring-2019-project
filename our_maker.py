@@ -1,12 +1,7 @@
 import bitcoin_core_connection_setup
 import key_generator
-import string
-import connection
-import ecdsa
-
 A = key_generator.Person()
 A.key_generator_func()
-
 B = key_generator.Person()
 B.key_generator_func()
 
@@ -18,7 +13,10 @@ address_lior = connection1.getnewaddress("lior")
 priv_key_lior = connection1.dumpprivkey(address_lior)
 address_barak = connection1.getnewaddress("barak")
 priv_key_barak = connection1.dumpprivkey(address_barak)
-#address_multi = connection1.addmultisigaddress()
+keys=[]
+keys.append(priv_key_barak)
+keys.append(priv_key_lior)
+address_multi = connection1.addmultisigaddress(keys)
 connection1.generatetoaddress(1,address_lior)
 list = [address_lior]
 print("lior address:",address_lior)
@@ -31,9 +29,7 @@ unspent = connection1.listunspent(1,999999,list)
 unspent_txid = unspent[0]
 txid_lior_block = unspent_txid[0].get("txid")
 print("unspent:",txid_lior_block)
-connection1.createrawtransaction([{"txid": txid_lior_block,
-                  "vout": 0}],
-               {address_barak:40})
+connection1.createrawtransaction([{"txid": txid_lior_block, "vout": 0}], {address_barak:40})
 print("barak balance:", connection1.getreceivedbylabel("barak",0))
 #print("unspent:",connection1.listunspent(1,999999))
 print("total balance:",connection1.getbalance())
