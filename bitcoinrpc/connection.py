@@ -713,7 +713,7 @@ class BitcoinConnection(object):
         except JSONRPCException as e:
             raise _wrap_exception(e.error)
 
-    def listunspent(self, minconf=1, maxconf=999999,address=""):
+    def listunspent(self, minconf=1, maxconf=999999,address="[]"):
         """
         Returns a list of unspent transaction inputs in the wallet.
 
