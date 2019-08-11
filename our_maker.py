@@ -17,6 +17,7 @@ multi_private_keys.append(lior.private_key)
 multi_private_keys.append(barak.private_key)
 multi_address = connection1.addmultisigaddress(2,multi_public_keys).get("address")
 print(multi_address)
+
 connection1.generatetoaddress(1,multi_address)
 list = [multi_address]
 print(connection1.generate(100))
