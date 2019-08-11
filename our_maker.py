@@ -28,8 +28,9 @@ print("barak private key:",priv_key_barak)
 print(connection1.generate(100))
 print("total balance:",connection1.getbalance())
 unspent = connection1.listunspent(1,999999,list)
-#unspent_txid = get_tx_id(unspent)
-print("unspent:",unspent[0])
+unspent_txid = unspent[0]
+id = unspent_txid
+print("unspent:",id[0])
 txid_lior_block = "a9d4599e15b53f3eb531608ddb31f48c695c3d0b3538a6bda871e8b34f2f430c"
 connection1.createrawtransaction([{"txid": txid_lior_block,
                   "vout": 0}],

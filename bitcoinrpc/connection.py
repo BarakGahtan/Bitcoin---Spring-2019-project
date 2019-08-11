@@ -726,7 +726,7 @@ class BitcoinConnection(object):
 
         """
         try:
-            return [TransactionInfo(**tx) for tx in
+            return [
                     self.proxy.listunspent(minconf, maxconf,address)]
         except JSONRPCException as e:
             raise _wrap_exception(e.error)
