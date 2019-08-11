@@ -871,3 +871,9 @@ class BitcoinConnection(object):
             return True
         except JSONRPCException as e:
             raise _wrap_exception(e.error)
+
+    def setlabel(self, add,name):
+        try:
+            self.proxy.setlabel(add, name)
+        except JSONRPCException as e:
+            raise _wrap_exception(e.error)

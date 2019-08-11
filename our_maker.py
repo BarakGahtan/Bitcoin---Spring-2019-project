@@ -1,5 +1,6 @@
 import bitcoin_core_connection_setup
 import key_generator
+
 lior = key_generator.Person()
 lior.key_generator_func()
 barak = key_generator.Person()
@@ -7,7 +8,11 @@ barak.key_generator_func()
 itay = key_generator.Person()
 itay.key_generator_func()
 
+
 connection1 = bitcoin_core_connection_setup.connect_to_node()
+res1 = setlabel(lior.address,"lior")
+res2 = setlabel(lior.address,"barak")
+res3 = setlabel(lior.address,"itay")
 print(connection1.getblockcount())
 multi_public_keys=[]
 multi_public_keys.append(lior.public_key)
@@ -18,9 +23,8 @@ multi_private_keys.append(barak.private_key)
 multi_address = connection1.addmultisigaddress(2,multi_public_keys).get("address")
 print(multi_address)
 
-connection1.generatetoaddress(1,multi_address)
+connection1.generatetoaddress(101,multi_address)
 list = [multi_address]
-print(connection1.generate(100))
 print("total balance:",connection1.getbalance())
 unspent = connection1.listunspent(1,999999,list)
 unspent_txid = unspent[0]
