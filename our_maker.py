@@ -45,6 +45,7 @@ signed = connection1.signrawtransactionwithkey(hash_to_be_sent,param_input,multi
 print(signed)
 print("fff")
 
+
 #print("itay balance:", connection1.getreceivedbylabel("itay",0))
 
 """
