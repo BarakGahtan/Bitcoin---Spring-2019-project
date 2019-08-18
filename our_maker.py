@@ -20,22 +20,30 @@ multi_public_keys.append(barak.public_key)
 multi_private_keys=[]
 multi_private_keys.append(lior.private_key)
 multi_private_keys.append(barak.private_key)
-multi_address = connection1.addmultisigaddress(2,multi_public_keys).get("address")
-connection1.setlabel(multi_address,",multi")
+multi_struct = connection1.addmultisigaddress(2,multi_public_keys)
+redeem_script = multi_struct.get("redeemScript")
+multi_address = multi_struct.get("address")
+connection1.setlabel(multi_address,"multi")
 print(multi_address)
 
-connection1.generatetoaddress(101,multi_address)
-connection1.generate(101)
-
+generate_struct = connection1.generatetoaddress(101,multi_address)
+first_txid = generate_struct[0]
 list = [multi_address]
 print("total balance:",connection1.getbalance())
 unspent = connection1.listunspent(1,999999,list)
-unspent_txid = unspent[0]
-txid_multi_block = unspent_txid[0].get("txid")
-print("unspent:",txid_multi_block)
-hash_to_be_sent = connection1.createrawtransaction([{"txid": txid_multi_block, "vout": 0}], {itay.address:40})
-signed = connection1.signrawtransactionwithkey(hash_to_be_sent,multi_private_keys)
+
+#unspent_txid = unspent[0]
+block_struct = connection1.getblock(first_txid,2)
+txid_struct = block_struct.get("tx")
+txid_number = txid_struct[0].get("txid")
+txid_scriptPubKey = txid_struct[0].get("scriptPubKey")
+#txid_multi_block = unspent_txid[0].get("txid")
+#print("unspent:",txid_multi_block)
+hash_to_be_sent = connection1.createrawtransaction([{"txid": txid_number, "vout": 0}], {itay.address:40})
+param_input = [{"txid": txid_number, "vout": 1,"scriptPubKey": txid_scriptPubKey, "redeemScript": redeem_script }]
+signed = connection1.signrawtransactionwithkey(hash_to_be_sent,param_input,multi_private_keys)
 print(signed)
+print("fff")
 
 #print("itay balance:", connection1.getreceivedbylabel("itay",0))
 
