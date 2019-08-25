@@ -1,5 +1,15 @@
 import bitcoin_core_connection_setup
 import key_generator
+import os
+import shutil
+import subprocess
+
+os.system('TASKKILL /F /IM bitcoind.exe')
+myfolder1 = "C:\\Users\\LIORD\\AppData\\Roaming\\Bitcoin\\regtest"
+# myfolder2 = "C:\\Users\\gahta\\AppData\\Roaming\\Bitcoin\\regtest"
+if os.path.exists(myfolder1):
+    shutil.rmtree(myfolder1)
+os.popen('C:\Program Files\Bitcoin\daemon\bitcoind.exe -regtest -deprecatedrpc=generate')
 
 lior = key_generator.Person()
 lior.key_generator_func()
@@ -40,11 +50,11 @@ vout_struct = txid_struct[0].get("vout")
 txid_scriptPubKey = vout_struct[0].get("scriptPubKey")
 scriptPubKey = txid_scriptPubKey.get("hex")
 
-hash_to_be_sent = connection1.createrawtransaction([{"txid": txid_number, "vout": 0}], {itay.address:40})
+hash_to_be_sent = connection1.createrawtransaction([{"txid": txid_number, "vout": 0}], {itay.address:49.95})
 param_input = [{"txid": txid_number, "vout": 1,"scriptPubKey": scriptPubKey, "redeemScript": redeem_script }]
 signed = connection1.signrawtransactionwithkey(hash_to_be_sent,multi_private_keys,param_input)
 print(signed)
 signed_hex = signed.get("hex")
-send = connection1.sendrawtransaction(signed_hex,1)
+send = connection1.sendrawtransaction(signed_hex)
 print(send)
 print("DONE")
