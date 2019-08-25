@@ -4,7 +4,7 @@ import os
 import shutil
 import subprocess
 import subprocess
-
+import time
 def process_exists(process_name):
     call = 'TASKLIST', '/FI', 'imagename eq %s' % process_name
     # use buildin check_output right away
@@ -16,10 +16,14 @@ def process_exists(process_name):
 
 if process_exists('bitcoind.exe'):
     os.system('TASKKILL /F /IM bitcoind.exe')
+time.sleep(3)
+
 myfolder1 = "C:\\Users\\gahta\\AppData\\Roaming\\Bitcoin\\regtest"
 if os.path.exists(myfolder1):
     shutil.rmtree(myfolder1)
-os.popen("C:\\Program Files\\Bitcoin\\daemon\\bitcoind.exe -regtest -deprecatedrpc=generate &")
+subprocess.Popen(["C:\\Program Files\\Bitcoin\\daemon\\bitcoind.exe", "-regtest","-deprecatedrpc=generate"])
+#os.popen('C:\\Program Files\\Bitcoin\\daemon\\bitcoind.exe -regtest -deprecatedrpc=generate &')
+time.sleep(7)
 
 lior = key_generator.Person()
 lior.key_generator_func()
