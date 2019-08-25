@@ -18,13 +18,8 @@ def send_to_address(source_address,source_private_key,block_id,destination,amoun
     block_struct = connection1.getblock(block_id,2)
     txid_struct = block_struct.get("tx")
     txid_number = txid_struct[0].get("txid")
-    vout_struct = txid_struct[0].get("vout")
-    txid_scriptPubKey = vout_struct[0].get("scriptPubKey")
-    scriptPubKey = txid_scriptPubKey.get("hex")
     hash_to_be_sent = connection1.createrawtransaction([{"txid": txid_number, "vout": 0}], {destination:amount,source_address:50-amount})
-    param_input = [{"txid": txid_number, "vout": 0,"scriptPubKey": scriptPubKey}]
-    signed = connection1.signrawtransactionwithkey(hash_to_be_sent,source_private_key,param_input)
-    print(signed)
+    signed = connection1.signrawtransactionwithkey({hash_to_be_sent})
     signed_hex = signed.get("hex")
     return connection1.sendrawtransaction(signed_hex)
 
