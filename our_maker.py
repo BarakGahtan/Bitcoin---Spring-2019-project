@@ -3,13 +3,23 @@ import key_generator
 import os
 import shutil
 import subprocess
+import subprocess
 
-os.system('TASKKILL /F /IM bitcoind.exe')
-myfolder1 = "C:\\Users\\LIORD\\AppData\\Roaming\\Bitcoin\\regtest"
-# myfolder2 = "C:\\Users\\gahta\\AppData\\Roaming\\Bitcoin\\regtest"
+def process_exists(process_name):
+    call = 'TASKLIST', '/FI', 'imagename eq %s' % process_name
+    # use buildin check_output right away
+    output = subprocess.check_output(call)
+    # check in last line for process name
+    last_line = output.strip().split('\r\n')[-1]
+    # because Fail message could be translated
+    return last_line.lower().startswith(process_name.lower())
+
+if process_exists('bitcoind.exe'):
+    os.system('TASKKILL /F /IM bitcoind.exe')
+myfolder1 = "C:\\Users\\gahta\\AppData\\Roaming\\Bitcoin\\regtest"
 if os.path.exists(myfolder1):
     shutil.rmtree(myfolder1)
-os.popen('C:\Program Files\Bitcoin\daemon\bitcoind.exe -regtest -deprecatedrpc=generate')
+os.popen("C:\\Program Files\\Bitcoin\\daemon\\bitcoind.exe -regtest -deprecatedrpc=generate &")
 
 lior = key_generator.Person()
 lior.key_generator_func()
