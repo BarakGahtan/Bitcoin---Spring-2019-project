@@ -6,7 +6,6 @@ import subprocess
 import time
 
 #helper functions#
-
 def process_exists(process_name):
     call = 'TASKLIST', '/FI', 'imagename eq %s' % process_name
     # use buildin check_output right away
@@ -44,6 +43,8 @@ def send_from_multisig(source_address,privateArray,block_id,destination,amount):
     result = connection1.sendrawtransaction(hex_hash_sign)
     return result
 
+##end of helper functions
+
 ##intialize system
 if process_exists('bitcoind.exe'):
     os.system('TASKKILL /F /IM bitcoind.exe')
@@ -53,6 +54,7 @@ if os.path.exists(myPath):
     shutil.rmtree(myPath)
 subprocess.Popen(["C:\\Program Files\\Bitcoin\\daemon\\bitcoind.exe", "-regtest","-deprecatedrpc=generate"])
 time.sleep(7)
+##end of intialize system
 
 #generate key for players
 A = key_generator.Person()
@@ -71,6 +73,7 @@ generate_enviroment = connection1.generate(100)
 idBlockA = structA[0]
 idBlockD = structD[0]
 idBlockB = structB[0]
+connection1.setlabel(A.address,"aAccount")
 
 ##generate the address for the multisig - the joint account
 ADpublic_keys=[]
@@ -85,5 +88,5 @@ AprivateArray = []
 AprivateArray.append(A.private_key)
 info1 = connection1.getmininginfo()
 send_A_to_B  =  send_to_address(A.address,AprivateArray,idBlockA,B.address,25)
-info2 = connection1.getmininginfo()
+
 print("sign")
