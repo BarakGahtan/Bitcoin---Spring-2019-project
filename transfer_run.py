@@ -23,12 +23,14 @@ def send_to_address(source_address,privateArray,block_id,destination,amount):
     txid_scriptPubKey = vout_struct[0].get("scriptPubKey")
     scriptPubKey = txid_scriptPubKey.get("hex")
     hash_to_be_sent = connection1.createrawtransaction([{"txid": txid_number, "vout": 0}], {destination:25,source_address:24.95})
+    abcd = connection1.decoderawtransaction(hash_to_be_sent)
+    print(abcd)
     param_input = [{"txid": txid_number, "vout": 1,"scriptPubKey": scriptPubKey}]
     signed = connection1.signrawtransactionwithkey(hash_to_be_sent, privateArray,param_input)
     hex_hash_sign = signed.get("hex")
     result = connection1.sendrawtransaction(hex_hash_sign)
     # res1 = connection1.getrawtransaction(txid_number)
-    return result , param_input
+    return result , param_input,signed
 
 def send_from_multisig(source_address,privateArray,block_id,destination,amount):
     block_struct = connection1.getblock(block_id,2)
@@ -44,26 +46,20 @@ def send_from_multisig(source_address,privateArray,block_id,destination,amount):
     result = connection1.sendrawtransaction(hex_hash_sign)
     return result
 
-def send_to_address_with_input(source_address,private_key1,private_key2,destination,amount,input,block_id,redeem_script):
-    block_struct_2 = connection1.getblock(block_id,2)
-    txid_struct_2 = block_struct_2.get("tx")
-    txid_number_2 = txid_struct_2[0].get("txid")
-    vout_struct_2 = txid_struct_2[0].get("vout")
-    txid_scriptPubKey_2 = vout_struct_2[0].get("scriptPubKey")
-    scriptPubKey_2 = txid_scriptPubKey_2.get("hex")
-    txid_number = input[0].get("txid")
-    vout_struct = input[0].get("vout")
-    scriptPubKey = input[0].get("scriptPubKey")
-    hash_to_be_sent = connection1.createrawtransaction([{"txid": txid_number, "vout": 0},{"txid": txid_number_2, "vout": 1}], {destination:25,source_address:24.95})
-    param_input = [{"txid": txid_number, "vout": 0,"scriptPubKey": scriptPubKey},{"txid": txid_number_2, "vout": 1,"scriptPubKey": scriptPubKey_2,"redeemScript": redeem_script}]
-    signed_1 = connection1.signrawtransactionwithkey(hash_to_be_sent, private_key1,param_input)
-    hex_hash_sign_1 = signed_1.get("hex")
-    # signed_2 = connection1.signrawtransactionwithkey(hex_hash_sign_1, private_key2,param_input)
-    # hex_hash_sign_2 = signed_2.get("hex")
-    result = connection1.sendrawtransaction(hex_hash_sign_1)
-    # res1 = connection1.getrawtransaction(txid_number)
-    return result , param_input[0]
-
+def send_to_address_with_input(source_address,private_key1,private_key2,destination,rawTransaction):
+    x = rawTransaction.get("txid")
+    y = rawTransaction.get("vout")
+    hash_to_be_sent = connection1.createrawtransaction({rawTransaction.get("txid"),rawTransaction.get("vout")}, {destination:10,source_address:39.90})
+    txID = rawTransaction.get("txid")
+    scriptPubKey = rawTransaction.get("vout")[0].get("scriptPubKey")
+    param_input = [{"txid": txID, "vout": 1,"scriptPubKey": scriptPubKey}]
+    privateArray = []
+    privateArray.append(private_key2)
+    privateArray.append(private_key1)
+    signed = connection1.signrawtransactionwithkey(hash_to_be_sent, privateArray , param_input)
+    hex_hash_sign = signed.get("hex")
+    result = connection1.sendrawtransaction(hex_hash_sign)
+    return result
 ##end of helper functions
 
 ##intialize system
@@ -98,7 +94,7 @@ idBlockD = structD[0]
 idBlockB = structB[0]
 connection1.setlabel(A.address,"aAccount")
 
-##generate the address for the multisig - the joint account
+#generate the address for the multisig - the joint account
 ADpublic_keys=[]
 ADpublic_keys.append(A.public_key)
 ADpublic_keys.append(D.public_key)
@@ -113,9 +109,9 @@ info1 = connection1.getmininginfo()
 
 ADStruct = connection1.addmultisigaddress(2,ADpublic_keys)
 ADAdress = ADStruct.get("address")
-
-send_A_to_AD, input_AD = send_to_address(A.address,AprivateArray,idBlockA,ADAdress,25)
+send_A_to_AD, input_AD,signed = send_to_address(A.address,AprivateArray,idBlockA,ADAdress,25)
+txID11 = connection1.getrawtransaction(input_AD[0].get("txid"))
 structA_3 = connection1.generatetoaddress(100,A.address)
-send_A_to_B  =  send_to_address_with_input(A.address,AprivateArray,ADPrivateKeys,B.address,25,input_AD, idBlockA_2,redeem_script_A )
+send_A_to_B  =  send_to_address_with_input(A.address,AprivateArray,ADPrivateKeys,B.address,txID11)
 
 print("sign")
