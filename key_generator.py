@@ -1,12 +1,19 @@
 import os, binascii, hashlib, base58, ecdsa
 
+########################################################################################################
+#Generates a key for every account on our system:
+    #We are working under regtest mode, Therefore we need to create addresses and keys according these instructions:
+    #For creating an address: Adding b"\x6f": b"\x6f" + hash160.
+    #For creating a full key: Adding 'EF': 'EF' + binascii.hexlify(priv_key).decode().
+    #For creating a public key: Adding '04': '04' + binascii.hexlify(vk.to_string()).decode().
+########################################################################################################
+
 class Person:
     def __init__(self):
         self.private_key = 0
         self.public_key= 0
         self.address= 0
         # self.balance= 0
-
 
     def ripemd160(self,x):
         d = hashlib.new('ripemd160')
@@ -15,7 +22,6 @@ class Person:
 
     def key_generator_func(self):
         for n in range(1):  # number of key pairs to generate`
-
             # generate private key , uncompressed WIF starts with "5"
             priv_key = os.urandom(32)
             fullkey = 'EF' + binascii.hexlify(priv_key).decode()
@@ -31,7 +37,6 @@ class Person:
             checksum = hashlib.sha256(hashlib.sha256(publ_addr_a).digest()).digest()[:4]
             publ_addr_b = base58.b58encode(publ_addr_a + checksum)
             i = n + 1
-
             print('Private Key    ', str(i) + ": " + WIF.decode())
             print("Bitcoin Address", str(i) + ": " + publ_addr_b.decode())
         self.private_key = WIF

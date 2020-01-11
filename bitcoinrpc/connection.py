@@ -26,6 +26,19 @@ from bitcoinrpc.exceptions import _wrap_exception, WalletPassphraseIncorrect, Wa
 from bitcoinrpc.data import (ServerInfo, AccountInfo, AddressInfo, TransactionInfo,
                              AddressValidation, WorkItem, MiningInfo)
 
+########################################################################################################
+########################################################################################################
+#The bitcoin RPC (Python 2.7):
+    #Importent notes:
+    #Working functions:
+        #Getrawmempool.
+        #Getblock.
+        #Decoderawtransaction.
+    #NOT Working functions:
+        #Unspentlist.
+        #Wallet functions.
+########################################################################################################
+########################################################################################################
 
 class BitcoinConnection(object):
     """
@@ -137,7 +150,6 @@ class BitcoinConnection(object):
         except JSONRPCException as e:
             raise _wrap_exception(e.error)
 
-    #not in use
     def setgenerate(self, generate, genproclimit=None, isKeyBlock = None):
         """
         Enable or disable generation (mining) of coins.
@@ -463,7 +475,7 @@ class BitcoinConnection(object):
         - *hexstring* -- A hex string of the transaction to be decoded.
         """
         try:
-            retVal = self.proxy.signrawtransactionwithkey(hexstring)
+            retVal = self.proxy.decoderawtransaction(hexstring)
             return dict(retVal)
         except JSONRPCException as e:
             raise _wrap_exception(e.error)
@@ -805,20 +817,27 @@ class BitcoinConnection(object):
             raise _wrap_exception(e.error) 
 
 # ITTAY: 
+
     def getrawmempool(self, verbose = None, countOnly = None):
         """
         Returns all transaction ids in memory pool
         """
         try:
-            if verbose != None: 
-                if countOnly != None: 
-                    return self.proxy.getrawmempool(verbose, countOnly) 
-                else: 
-                    return self.proxy.getrawmempool(verbose) 
-            else: 
-                return self.proxy.getrawmempool() 
-        except JSONRPCException as e: 
-            raise _wrap_exception(e.error) 
+            if verbose != None:
+                if countOnly != None:
+                    return self.proxy.getrawmempool(verbose, countOnly)
+                else:
+                    return self.proxy.getrawmempool(verbose)
+            else:
+                return self.proxy.getrawmempool()
+        except JSONRPCException as e:
+            raise _wrap_exception(e.error)
+
+    def gettxout(self, txid, n , mempool = None):
+        try:
+            return self.proxy.gettxout(txid,n,mempool)
+        except JSONRPCException as e:
+            raise _wrap_exception(e.error)
 
     def settxfee(self, amount):
         try:
@@ -860,7 +879,6 @@ class BitcoinConnection(object):
             return self.proxy.addmultisigaddress(number,keys)
         except JSONRPCException as e:
             raise _wrap_exception(e.error)
-
 
     def sendrawtransaction(self, txnHex): 
         """

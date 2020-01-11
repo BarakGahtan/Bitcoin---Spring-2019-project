@@ -1,6 +1,10 @@
 import configparser
 from bitcoinrpc import connection
 
+########################################################################################################
+#Generating our bitcoind connection using bitcoind python JSON-RPC connection.
+########################################################################################################
+
 bitcoin_core_rpc_connection = None
 
 def connect_to_node():

@@ -37,6 +37,7 @@ try:
     import http.client as httplib
 except ImportError:
     import httplib
+
 import base64
 import json
 import decimal, sys
@@ -52,12 +53,16 @@ USER_AGENT = "AuthServiceProxy/0.1"
 
 HTTP_TIMEOUT = 30
 
+########################################################################################################
+########################################################################################################
+#The bitcoin RPC (Python 2.7) proxy implementation:
+########################################################################################################
+########################################################################################################
 
 class JSONRPCException(Exception):
     def __init__(self, rpcError):
         Exception.__init__(self)
         self.error = rpcError
-
 
 class AuthServiceProxy(object):
     def __init__(self, serviceURL, serviceName = None, numberOfAttempts = 1, httpTimeout = HTTP_TIMEOUT):
